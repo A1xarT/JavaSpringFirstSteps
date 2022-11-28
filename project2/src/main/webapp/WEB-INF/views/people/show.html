@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+
+<head>
+    <meta charset="ISO-8859-1">
+    <title>Person</title>
+</head>
+
+<body>
+<p th:text="'Name: '+${person.getName()}">VALUE</p>
+<p th:text="'Id: '+${person.getId()}">VALUE</p>
+<p th:text="'Birthday: ' + ${#dates.format(person.getBirthday(),'dd-MM-yyyy')}">VALUE</p>
+<span th:if="${person.getBookList().size() &gt 0}">
+    <p th:text="'Books in use:'">text</p>
+        <ul th:each="book : ${person.getBookList()}">
+            <span th:if="${book.checkRent()}">
+                <li>
+            <a th:href="@{/books/{id}(id=${book.getId()})}" th:text="${book.getName()}" style="white-space: nowrap">
+                user</a>
+                </li>
+            </span>
+            <span th:unless="${book.checkRent()}">
+                <li>
+            <a th:href="@{/books/{id}(id=${book.getId()})}" th:text="${book.getName()}"
+               style="white-space: nowrap; color:red">
+                user</a>
+                </li>
+            </span>
+    </ul>
+</span>
+<span th:unless="${person.getBookList().size() &gt 0}">
+        <p th:text="'The user does not have any books in use'">text</p>
+</span>
+
+<br>
+<form th:method="GET" th:action="@{/people/{id}/edit(id=${person.getId()})}">
+    <input type="submit" value="Edit">
+</form>
+<br/>
+<form th:method="DELETE" th:action="@{/people/{id}(id=${person.getId()})}">
+    <input type="submit" value="Delete">
+</form>
+</body>
+
+</html>
