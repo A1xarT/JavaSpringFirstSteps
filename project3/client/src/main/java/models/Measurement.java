@@ -1,6 +1,5 @@
 package models;
 
-import java.util.Random;
 import java.util.concurrent.ThreadLocalRandom;
 
 public class Measurement {
@@ -18,7 +17,6 @@ public class Measurement {
     }
 
     public static Measurement getRandomInstance(Sensor sensor) {
-        var random = new Random();
         Measurement measurement = new Measurement();
         measurement.setRaining(ThreadLocalRandom.current().nextBoolean());
         measurement.setValue(ThreadLocalRandom.current().nextDouble(-100, 100));
