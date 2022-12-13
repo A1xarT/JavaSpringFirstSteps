@@ -20,6 +20,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import static project3.RestApi.utl.ErrorsUtil.combineErrors;
 import static project3.RestApi.utl.common.SensorCommonUtil.convertToSensorDTO;
 
 @RestController
@@ -55,11 +56,7 @@ public class SensorController {
     public ResponseEntity<HttpStatus> createSensor(@RequestBody @Valid SensorDTO sensorDTO, BindingResult bindingResult) {
         sensorDtoValidator.validate(sensorDTO, bindingResult);
         if (bindingResult.hasErrors()) {
-            StringBuilder stringBuilder = new StringBuilder();
-            for (var field : bindingResult.getFieldErrors()) {
-                stringBuilder.append(field.getField()).append(" - ").append(field.getDefaultMessage()).append(";");
-            }
-            throw new SensorNotCreatedException(stringBuilder.toString());
+            throw new SensorNotCreatedException(combineErrors(bindingResult));
         }
         sensorService.save(enrichOnCreation(convertToSensor(sensorDTO)));
         return ResponseEntity.ok(HttpStatus.OK);

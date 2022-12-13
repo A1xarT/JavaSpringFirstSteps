@@ -24,6 +24,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import static project3.RestApi.utl.ErrorsUtil.combineErrors;
 import static project3.RestApi.utl.common.SensorCommonUtil.convertToSensorDTO;
 
 @RestController
@@ -51,11 +52,7 @@ public class MeasurementController {
     public HttpEntity<HttpStatus> addMeasurement(@RequestBody @Valid MeasurementDTO measurementDTO, BindingResult bindingResult) {
         measurementDtoValidator.validate(measurementDTO, bindingResult);
         if (bindingResult.hasErrors()) {
-            StringBuilder stringBuilder = new StringBuilder();
-            for (var field : bindingResult.getFieldErrors()) {
-                stringBuilder.append(field.getField()).append(" - ").append(field.getDefaultMessage()).append(";");
-            }
-            throw new MeasurementNotCreatedException(stringBuilder.toString());
+            throw new MeasurementNotCreatedException(combineErrors(bindingResult));
         }
         measurementService.save(enrichOnCreation(convertToMeasurement(measurementDTO)));
         return ResponseEntity.ok(HttpStatus.OK);
