@@ -18,7 +18,7 @@ public class Person {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
     @NotEmpty(message = "Name shouldn't be empty")
-    @Size(min = 3, max = 100, message = "Name size should me in range (3,100)")
+    @Size(min = 3, max = 100, message = "Name size should be in range (3,100)")
     @Column(name = "name")
     private String name;
     @Column(name = "birthday")
