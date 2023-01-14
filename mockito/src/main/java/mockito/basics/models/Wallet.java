@@ -3,6 +3,8 @@ package mockito.basics.models;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 
+import java.util.Objects;
+
 @Entity
 @Table(name = "Wallet")
 public class Wallet {
@@ -16,6 +18,19 @@ public class Wallet {
     @JoinColumn(name = "person_id", referencedColumnName = "id")
     @JsonBackReference
     private Person owner;
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Wallet wallet = (Wallet) o;
+        return id == wallet.id && money == wallet.money && Objects.equals(owner, wallet.owner);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, money, owner);
+    }
 
     public Wallet(int money, Person owner) {
         this.money = money;
