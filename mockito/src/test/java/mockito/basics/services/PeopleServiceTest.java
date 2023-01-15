@@ -33,8 +33,6 @@ class PeopleServiceTest {
     @Test
     void findAllShouldEqualsMocked() {
         var listFromService = peopleService.findAll();
-        for (int i = 0; i < personList.size(); i++) {
-            Assertions.assertEquals(listFromService.get(i), personList.get(i));
-        }
+        Assertions.assertArrayEquals(listFromService.toArray(), personList.toArray());
     }
 }

@@ -12,6 +12,7 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.util.Arrays;
 import java.util.List;
 
 @ExtendWith(MockitoExtension.class)
@@ -34,9 +35,7 @@ class WalletServiceTest {
     @Test
     void findAllShouldEqualsMocked() {
         var listFromService = walletService.findAll();
-        for (int i = 0; i < walletList.size(); i++) {
-            Assertions.assertEquals(listFromService.get(i), walletList.get(i));
-        }
+        Assertions.assertArrayEquals(listFromService.toArray(), walletList.toArray());
     }
 
     @Test
@@ -44,9 +43,7 @@ class WalletServiceTest {
         final int moneyToAdd = 100;
         var moneyList = walletList.stream().mapToInt(Wallet::getMoney).toArray();
         walletService.giveMoneyToAll(moneyToAdd);
-        for (int i = 0; i < moneyList.length; i++) {
-            Assertions.assertEquals(moneyList[i], walletList.get(i).getMoney() - moneyToAdd);
-        }
+        Assertions.assertArrayEquals(moneyList, walletList.stream().mapToInt(x -> x.getMoney() - moneyToAdd).toArray());
     }
 
     @Test
@@ -54,8 +51,7 @@ class WalletServiceTest {
         final double taxRate = 0.256;
         var moneyList = walletList.stream().mapToInt(Wallet::getMoney).toArray();
         walletService.payTaxes(taxRate);
-        for (int i = 0; i < moneyList.length; i++) {
-            Assertions.assertEquals(Math.floor(moneyList[i] * (1 - taxRate)), walletList.get(i).getMoney());
-        }
+        Assertions.assertArrayEquals(Arrays.stream(moneyList).map(x -> (int) Math.floor(x * (1 - taxRate))).toArray(),
+                walletList.stream().mapToInt(Wallet::getMoney).toArray());
     }
 }
